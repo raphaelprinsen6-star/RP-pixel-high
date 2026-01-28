@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* CSS voor het uiterlijk van de karakters */
+        #character-container {
+            width: 100vw;
+            height: 100vh;
+            background-color: #808080; /* Jouw grijze school achtergrond */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar {
+            width: 80px;  /* Pas dit aan naar de grootte van je pixel art */
+            height: 120px; 
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            cursor: grab;
+            background-size: contain;
+            background-repeat: no-repeat;
+            image-rendering: pixelated; /* Zorgt dat de pixels scherp blijven */
+            z-index: 10;
+        }
+
+        .avatar:active {
+            cursor: grabbing;
+        }
+
+        /* Naamlabel boven het hoofd */
+        .name-tag {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 2px 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="character-container">
+        <div id="player" class="avatar">
+            <div class="name-tag" id="player-name">Speler</div>
+        </div>
+    </div>
+
+    <script>
+        const player = document.getElementById('player');
+        let isDragging = false;
+
+        // --- STAP 1: Karakter instellen ---
+        // Verander 'jongen' naar 'meisje' om te wisselen
+        function kiesKarakter(type) {
+            if(type === 'jongen') {
+                player.style.backgroundImage = "url('jongen.png')"; 
+            } else {
+                player.style.backgroundImage = "url('meisje.png')";
+            }
+        }
+
+        // Standaard zetten we hem op de jongen
+        kiesKarakter('jongen'); 
+
+
+        // --- STAP 2: Slepen (Mouse & Touch) ---
+        function startDrag(e) {
+            isDragging = true;
+        }
+
+        function endDrag() {
+            isDragging = false;
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+
+            // Zorgt dat het werkt op zowel computer (mouse) als telefoon (touch)
+            let clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            let clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+
+            // Verplaats het poppetje (centreren op de muis/vinger)
+            player.style.left = (clientX - 40) + 'px';
+            player.style.top = (clientY - 60) + 'px';
+        }
+
+        // Events toevoegen
+        player.addEventListener('mousedown', startDrag);
+        player.addEventListener('touchstart', startDrag);
+        
+        window.addEventListener('mousemove', drag);
+        window.addEventListener('touchmove', drag);
+        
+        window.addEventListener('mouseup', endDrag);
+        window.addEventListener('touchend', endDrag);
+
+    </script>
+</body>
+</html>
