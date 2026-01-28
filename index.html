@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Highschool RP - Pixel World</title>
+    <style>
+        /* CSS: De visuele stijl */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Courier New', Courier, monospace; /* Pixel-achtig lettertype */
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Het menu venster */
+        #menu-container {
+            background-color: #333;
+            border: 4px solid #000;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 10px 10px 0px #000;
+            width: 300px;
+        }
+
+        h1 { color: #fff; font-size: 1.5rem; text-shadow: 2px 2px #000; }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #000;
+            background: #555;
+            color: white;
+        }
+
+        .pixel-button {
+            background-color: #4a90e2;
+            color: white;
+            border: 3px solid #000;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            display: inline-block;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .pixel-button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000; }
+
+        /* De Admin Doos */
+        #admin-box {
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 30px;
+            transition: transform 0.2s;
+        }
+
+        #admin-box:hover { transform: scale(1.1); }
+
+        /* Game Scherm (School) */
+        #game-screen {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            background-color: #808080; /* De grijze school */
+            position: relative;
+        }
+
+        /* Het karakter dat je kunt slepen */
+        #player {
+            width: 50px;
+            height: 80px;
+            position: absolute;
+            cursor: grab;
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 10;
+        }
+
+        /* Chatbox linksboven */
+        #chat-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 250px;
+            height: 150px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 10px;
+            font-size: 12px;
+            border: 2px solid #000;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="menu-container">
+        <h1>HIGHSCHOOL RP</h1>
+        <input type="text" id="username" placeholder="Gebruikersnaam">
+        <input type="password" id="password" placeholder="Wachtwoord">
+        <br>
+        <div class="pixel-button" onclick="startGame()">INLOGGEN</div>
+        <div class="pixel-button" onclick="startGame()">AANMELDEN</div>
+        
+        <div id="admin-box" onclick="checkAdmin()">📦</div>
+    </div>
+
+    <div id="game-screen">
+        <div id="chat-container">Welkom op de grijze school!</div>
+        <div id="player"></div>
+    </div>
+
+    <script>
+        // JavaScript Logica
+        const player = document.getElementById('player');
+        const gameScreen = document.getElementById('game-screen');
+        const menu = document.getElementById('menu-container');
+
+        // Admin check
+        function checkAdmin() {
+            let code = prompt("Voer admin code in:");
+            if(code === "2012") {
+                alert("Welkom Admin! Je hebt nu toegang tot alle logs.");
+                // Hier kunnen we later de lijst met accounts tonen
+            } else {
+                alert("Foute code!");
+            }
+        }
+
+        // Start het spel
+        function startGame() {
+            const name = document.getElementById('username').value;
+            if(name === "") return alert("Kies een naam!");
+            
+            menu.style.display = 'none';
+            gameScreen.style.display = 'block';
+            
+            // Zet een standaard kleur poppetje (placeholder voor jouw pixels)
+            player.style.backgroundColor = "blue"; 
+            player.innerText = name;
+        }
+
+        // SLEEP LOGICA (Touch & Mouse)
+        let isDragging = false;
+
+        function move(e) {
+            if (!isDragging) return;
+            let x = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+            let y = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
+            
+            player.style.left = (x - 25) + 'px';
+            player.style.top = (y - 40) + 'px';
+        }
+
+        player.addEventListener('mousedown', () => isDragging = true);
+        player.addEventListener('touchstart', () => isDragging = true);
+        window.addEventListener('mouseup', () => isDragging = false);
+        window.addEventListener('touchend', () => isDragging = false);
+        window.addEventListener('mousemove', move);
+        window.addEventListener('touchmove', move);
+
+    </script>
+</body>
+</html>
